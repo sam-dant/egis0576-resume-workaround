@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*.log
+*.swp
+*~
+.DS_Store
+.venv/
+diagnostics*.txt

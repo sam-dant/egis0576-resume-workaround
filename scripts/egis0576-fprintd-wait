@@ -1,0 +1,14 @@
+#!/bin/bash
+# SPDX-License-Identifier: MIT
+set -euo pipefail
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+MARKER=/run/egis0576-fprintd-resume.pending
+# Fail closed after 30 seconds instead of starting against an unfinished reset.
+# Never delete the marker here: the sleep hook owns it.
+for ((attempt=0; attempt<120; attempt++)); do
+    [[ -e $MARKER ]] || exit 0
+    sleep 0.25
+done
+[[ -e $MARKER ]] || exit 0
+printf '%s\n' 'egis0576-wait: recovery still pending after 30s; refusing fprintd startup.' >&2
+exit 1
