@@ -2,6 +2,22 @@
 
 [Português](reference-system.md) | **English** · [README](../README.en.md)
 
+## Initial package validation — 2026-09-13
+
+The driver was updated to tag v0.4.3, commit `5448ab7621d9a6cc18f922a452e8f83c3b46f88c`, built against libfprint 1.94.10. The installed library under `/usr/local` was confirmed to match the build, and fprintd was confirmed to load it.
+
+Executable `.bak`, `.before-sync`, and `.debug` copies were preserved outside the hook directory. The official v0.4.3 hook was tested first, without the wait drop-in. After restarting fprintd to clear an initial open error, `fprintd-verify` returned `verify-match`. The user confirmed normal screen-lock unlock and authentication after shutdown/power-on, but no fingerprint option after menu suspend or lid-close/open.
+
+The journal showed fprintd starting at 18:39:57 and the hook completing USB re-enumeration at 18:39:58. A later claim at 18:40:44 logged `Device was already claimed`. This sequence is consistent with early activation; it does not by itself prove the cause of every failure.
+
+This package was then installed with `--replace-existing`, backing up the previous configuration. The hook, helper, and drop-in were checked. All 28 automated tests passed; ShellCheck was unavailable. The user reported that fingerprint unlock then worked after both menu suspend and lid-close/open.
+
+This is an initial result on one machine: no exact cycle count was recorded, and long-term stability, restoration, and hardware failure paths remain unvalidated. v0.4.4 has not been tested. The installed helper now waits up to 30 seconds and fails if the marker persists.
+
+## Historical inspection before the update
+
+The rest of this page records the earlier state; installed-file descriptions below do not represent the current configuration.
+
 Read-only inspection performed while preparing the project. These findings describe the observed configuration; they do not certify that the new scripts have been run on this hardware.
 
 | Item | Observed |

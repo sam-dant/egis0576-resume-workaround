@@ -2,6 +2,22 @@
 
 **Português** | [English](reference-system.en.md) · [README](../README.md)
 
+## Validação inicial do pacote — 13/09/2026
+
+O driver foi atualizado para a tag v0.4.3, commit `5448ab7621d9a6cc18f922a452e8f83c3b46f88c`, compilado sobre libfprint 1.94.10. Foi confirmada a igualdade entre a biblioteca compilada e a instalada em `/usr/local`, e o carregamento dessa biblioteca pelo fprintd.
+
+As cópias executáveis `.bak`, `.before-sync` e `.debug` foram preservadas fora da pasta de hooks. Primeiro foi testado apenas o hook oficial da v0.4.3, sem o drop-in de espera. Após reiniciar fprintd para limpar um erro inicial de abertura, `fprintd-verify` retornou `verify-match`. O usuário confirmou funcionamento no bloqueio normal e após desligar/ligar, mas ausência da opção de digital após suspensão pelo menu e pela tampa.
+
+No journal, fprintd iniciou às 18:39:57 e o hook concluiu a reenumeração USB às 18:39:58. Às 18:40:44 houve `Device was already claimed`. A sequência é compatível com ativação antecipada; sozinha não prova a causa de todas as falhas.
+
+Em seguida, este pacote foi instalado com `--replace-existing`, com backup do estado anterior. Hook, helper e drop-in foram conferidos. Os 28 testes automatizados passaram; ShellCheck estava ausente. O usuário relatou que a digital passou a funcionar também na retomada da suspensão pelo menu e pela tampa.
+
+Este é um resultado inicial em uma máquina: não foi registrada uma contagem exata de ciclos, nem validada estabilidade prolongada, restauração ou caminhos de falha no hardware. A v0.4.4 não foi testada. O helper agora instalado aguarda até 30 segundos e falha se o marker persistir.
+
+## Inspeção histórica anterior à atualização
+
+O restante desta página registra o estado anterior; as descrições de arquivos instalados abaixo não representam a configuração atual.
+
 Inspeção somente leitura realizada durante a preparação do projeto. Estes dados descrevem a configuração encontrada; não certificam a execução dos scripts novos nesse hardware.
 
 | Item | Observado |
